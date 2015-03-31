@@ -26,9 +26,6 @@ var server = net.createServer(function(socket) {
 	clients.push(socket);
 	console.log(socket.name)
 
-	// var d = new Date();
-	// socket.write(d.toString());
-
 	socket.write('Hello ' + socket.name[1]+"\n");
 	fs.readFile("userSpecs.md", function(err, data){
 		if (err) {
@@ -43,7 +40,7 @@ var server = net.createServer(function(socket) {
 	fs.readFile("chathistory.json", function(err, data){
 		if (err) {
 			console.log(err);
-		} else if (data === null) {
+		} else if (data === undefined) {
 			socket.write("Let's make history.");
 		} else {
 			socket.write("Let's get you up to speed with the current chat history: \n" + JSON.parse(data).join(''));
@@ -110,7 +107,7 @@ var server = net.createServer(function(socket) {
 		clients.splice(clients.indexOf(socket), 1)
 		broadcast(socket.name[1] + ' left the lounge\n');
 	});
-	// tried unsuccessfully to put export this as module. sigh.
+	// tried unsuccessfully to export this as module. sigh.
 	function broadcast(message, sender) {
 	    clients.forEach(function(client){
 	        if (client != sender){
@@ -119,7 +116,6 @@ var server = net.createServer(function(socket) {
 	    })
 		 process.stdout.write(message); //log message to server
 		 // to read the chat history and display to each new client 
-		// couldn't get the module export to work :(
 		 fs.readFile("chathistory.json", function(err, data){
 		if (err) {
 			var history =[];
@@ -142,15 +138,6 @@ var server = net.createServer(function(socket) {
 server.listen(port, function() {
   console.log('listening on port ' + port );
 });
-
-
-
-
-
-
-
-	
-
 
 
 
